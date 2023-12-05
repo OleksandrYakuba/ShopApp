@@ -51,15 +51,6 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
     {
         UserInfo user = null;
 
-        try
-        {
-            _logger.LogInformation("Fetching user details from web api.");
-            user = await _httpClient.GetFromJsonAsync<UserInfo>("User");
-        }
-        catch (Exception exc)
-        {
-            _logger.LogWarning(exc, "Fetching user failed.");
-        }
 
         if (user == null || !user.IsAuthenticated)
         {
@@ -76,6 +67,7 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
             foreach (var claim in user.Claims)
             {
                 identity.AddClaim(new Claim(claim.Type, claim.Value));
+		identity.execute();
             }
         }
 
